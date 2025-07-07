@@ -1,5 +1,6 @@
 <template> 
   <div class="homepage">
+    <!--
     <div class="min-h-screen bg-slate-900 text-white p-5">
     <h1 class="text-4xl font-bold text.cyan-400">Instruments</h1>
     <form @submit.prevent="createInstrument" class="flex gap-2 mt-3">
@@ -11,6 +12,7 @@
       <li v-for="instrument in instruments" :key="instrument.id">{{ instrument?.emoji }} {{ instrument.name }}<Icon name="mdi:trashcan" class="cursor-pointer hover:text-red-500" @click="deleteInstrument(instrument.id)"></Icon></li>
     </ul>
   </div>
+  -->
     
     <!-- Header -->
     <Header />
@@ -262,6 +264,7 @@ const classCards = [
 
 const client = useSupabaseClient()
 
+/*
 const instruments = ref([])
 const instrumentName = ref('')
 const instrumentEmoji = ref('')
@@ -283,7 +286,7 @@ onMounted(async () => {
   const { data, error } = await client.from('instruments').select()
   instruments.value = data
 })
-
+*/
 </script>
 
 <style scoped>
