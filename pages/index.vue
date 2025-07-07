@@ -789,4 +789,5 @@ onMounted(async () => {
     gap: 1rem;
   }
 }
+
 </style>
