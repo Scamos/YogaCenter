@@ -24,7 +24,7 @@
         <i class="fab fa-pinterest-p"></i>
       </div>
     </div>
-    <p class="copyright">© 2025 Luppi, Scamozzi. All Rights Reserved.</p>
+    <p class="copyright">© 2025 Scamozzi. All Rights Reserved.</p>
   </footer>
   </div>
 </template>
