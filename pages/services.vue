@@ -52,6 +52,76 @@
     </div>
   </section>
 
+  <!-- Sezione scelta del piano di pagamento -->
+  <section class="choose-plan-services">
+  <p class="plan-subtitle">CHOOSE YOUR PLAN</p>
+  <h2 class="plan-title">FIND YOUR <span class="highlight">BEST FIT</span></h2>
+  <p class="plan-description">
+    Choose the plan that suits your lifestyle and commitment level. All plans include access to classes, instructors, and facilities.
+  </p>
+
+  <div class="plans">
+    <div class="plan-card standard">
+      <h3>STANDARD</h3>
+      <p class="price">€39 <span>/MO</span></p>
+      <ul>
+        <li>Limited Training Hours</li>
+        <li>No Cancel Anytime</li>
+        <li>No Hidden Fees</li>
+        <li>No Ancillaries Access</li>
+      </ul>
+      <button class="btn-disabled">GET STARTED</button>
+    </div>
+
+    <div class="plan-card premium">
+      <div class="label">POPULAR</div>
+      <h3>PREMIUM</h3>
+      <p class="price">€59 <span>/MO</span></p>
+      <ul>
+        <li>Unlimited Training Hours</li>
+        <li>Cancel Anytime</li>
+        <li>No Hidden Fees</li>
+        <li>Ancillaries Access</li>
+      </ul>
+      <button class="btn-pink">GET STARTED</button>
+    </div>
+  </div>
+</section>
+
+<!-- Sezione delle recensioni degli utenti -->
+<section class="testimonials">
+  <div class="section-header">
+    <p class="services-subtitle">• OUR CUSTOMERS SAY •</p>
+    <h2 class="services-title">
+      WHAT <span class="highlight">PEOPLE THINK</span>
+    </h2>
+  </div>
+
+  <div class="testimonial-grid">
+    <div class="testimonial-card">
+      <p class="quote">“Amazing experience! I feel more centered and at peace every session.”</p>
+      <div class="author">
+        <img src="/user1.png" alt="User 1" />
+        <span>JULIA ROBERTS</span>
+      </div>
+    </div>
+    <div class="testimonial-card">
+      <p class="quote">“The teachers are truly professional and compassionate.”</p>
+      <div class="author">
+        <img src="/user2.png" alt="User 2" />
+        <span>MICHAEL KING</span>
+      </div>
+    </div>
+    <div class="testimonial-card">
+      <p class="quote">“I love the outdoor sessions and flexibility of the plans. Highly recommended!”</p>
+      <div class="author">
+        <img src="/user3.png" alt="User 3" />
+        <span>LAURA FIELDS</span>
+      </div>
+    </div>
+  </div>
+</section>
+
   <Footer />
 </template>
 
@@ -195,5 +265,153 @@
   font-size: 0.9rem;
   margin-bottom: 0.8rem;
   color: #333;
+}
+
+.choose-plan-services {
+  background: #fdf9ff;
+  text-align: center;
+  padding: 4rem 2rem;
+}
+
+.plan-subtitle {
+  color: #6c3483;
+  font-weight: 600;
+  font-size: 0.9rem;
+  letter-spacing: 2px;
+}
+
+.plan-title {
+  font-size: 2.2rem;
+  margin: 1rem 0;
+}
+
+.plan-description {
+  max-width: 600px;
+  margin: 0 auto 2rem;
+  color: #777;
+}
+
+.plans {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.plan-card {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  width: 280px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  position: relative;
+  text-align: left;
+}
+
+.plan-card h3 {
+  font-size: 1.2rem;
+  color: #7d3c98;
+}
+
+.price {
+  font-size: 2rem;
+  color: #e24392;
+  margin: 1rem 0;
+}
+
+.price span {
+  font-size: 1rem;
+  color: #999;
+}
+
+.plan-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0;
+  color: #555;
+}
+
+.plan-card ul li {
+  margin-bottom: 0.5rem;
+}
+
+.btn-disabled {
+  background-color: #eee;
+  color: #555;
+  border: none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  border-radius: 20px;
+  margin-top: 1rem;
+}
+
+.plan-card.premium {
+  background: #9024af;
+  color: white;
+}
+
+.plan-card.premium ul li {
+  color: white;
+}
+
+.plan-card.premium .btn-pink {
+  background: white;
+  color: #9024af;
+  cursor: pointer;
+}
+
+.label {
+  position: absolute;
+  top: -12px;
+  left: 12px;
+  background: #ffccf2;
+  color: #9024af;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.7rem;
+  font-weight: bold;
+  border-radius: 12px;
+}
+
+.testimonials {
+  background-color: #f5e6fa;
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.testimonial-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 2rem;
+  max-width: 1000px;
+  margin: 2rem auto 0;
+}
+
+.testimonial-card {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.quote {
+  font-style: italic;
+  color: #555;
+  margin-bottom: 1.5rem;
+}
+
+.author {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  font-weight: bold;
+  color: #9024af;
+}
+
+.author img {
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  object-fit: cover;
 }
 </style>
