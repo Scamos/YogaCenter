@@ -52,7 +52,13 @@
           <p>{{ yogaClass.time }}</p>
           <p>{{ yogaClass.days }}</p>
         </div>
-        <a href="#" class="btn-pink">JOIN CLASS</a>
+        <NuxtLink
+          class="btn-pink"
+          :to="`/class?id=${yogaClass.id}`"
+          v-if="yogaClass.id !== 6"
+        >
+        JOIN CLASS
+        </NuxtLink>
       </div>
     </div>
 
@@ -76,7 +82,13 @@
           <p>{{ yogaClass.time }}</p>
           <p>{{ yogaClass.days }}</p>
         </div>
-        <a href="#" class="btn-pink">JOIN CLASS</a>
+        <NuxtLink
+          class="btn-pink"
+          :to="`/class?id=${yogaClass.id}`"
+          v-if="yogaClass.id !== 6"
+        >
+        JOIN CLASS
+        </NuxtLink>
       </div>
     </div>
 
