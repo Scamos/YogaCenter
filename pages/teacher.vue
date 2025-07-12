@@ -4,7 +4,7 @@
     <section class="teachers-hero">
     <Backbutton />
     <p class="subtitle">• OUR TEAM •</p>
-      <h1 class="title">MEET OUR <span class="highlight">YOGA TEACHERS</span></h1>
+      <h1 class="title">MEET OUR <span class="highlight">YOGA TEACHER</span></h1>
     </section>
 
     <!-- Breadcrumb -->
@@ -12,24 +12,85 @@
       <nav class="breadcrumb">
         <NuxtLink to="/" class="breadcrumb-link">Home</NuxtLink>
         <span class="dash">–</span>
-        <a href="#classes-top" class="current">Our Teachers</a>
+        <NuxtLink to="/teachers" class="breadcrumb-link">Our Teachers</NuxtLink>
+        <span class="dash">–</span>
+        <a href="#classes-top" class="current">Anna Laurent</a>
       </nav>
       </section>
 
       <div class="intro-section">
         <div class="intro-text">
-          <p class="section-subtitle">• WHO THEY ARE •</p>
-          <h2 class="section-title">THE MINDS <span class="highlight">BEHIND YOUR PROGRESS</span></h2>
+          <p class="section-subtitle">• YOGA EXPERT •</p>
+          <h2 class="section-title">MEET <span class="highlight">ANNA</span></h2>
           <p class="intro-description">
-            Our yoga teachers are more than instructors – they are mentors, guides, and wellness experts that shape your path with care and passion.
+            Our yoga teacher is more than an instructor – She is a mentor, guide and wellness expert that shape your path with care and passion.
           </p>
-          <h3 class="featured-name">LAURA DOVER</h3>
-          <p class="position">Head Teacher</p>
+          <h3 class="featured-name">ANNA LAURENT</h3>
+          <p class="position">Yoga Expert</p>
         </div>
         <div class="intro-image">
           <img src="/YogaTeacher.png" alt="Featured Teacher" />
         </div>
       </div>
+
+      <section class="teacher-cv-section">
+  <div class="cv-container">
+    <!-- Informazioni del CV -->
+    <div class="cv-info">
+      <h2>Curriculum Information</h2>
+      <div class="cv-item">
+        <h4>EDUCATION</h4>
+        <p>Yoga Institute of San Francisco</p>
+      </div>
+      <div class="cv-item">
+        <h4>CERTIFICATIONS</h4>
+        <p>RYT-500 Yoga Alliance</p>
+      </div>
+      <div class="cv-item">
+        <h4>EXPERIENCE</h4>
+        <p>10+ Years of Teaching</p>
+      </div>
+      <div class="cv-item">
+        <h4>LANGUAGES</h4>
+        <p>English, French, Sanskrit</p>
+      </div>
+    </div>
+
+    <!-- Immagine -->
+    <div class="cv-image">
+      <img src="/public/YogaTeacher2.png" alt="Anna Laurent full body" />
+    </div>
+  </div>
+</section>
+
+<section class="teacher-classes-section">
+  <p class="subtitle">CLASSES BY THIS TEACHER</p>
+  <h2 class="title">WHAT I <span>TEACH</span></h2>
+
+  <div class="classes-grid">
+    <div class="class-card">
+      <div class="image" style="background-image: url('/meditation.png')"></div>
+      <h3>MEDITATION YOGA</h3>
+      <p>Find your inner balance through breath and mindfulness.</p>
+      <div class="meta">
+        <p>08:30 AM - 10:00 AM</p>
+        <p>Friday - Sunday</p>
+      </div>
+      <a href="#" class="btn-outline">JOIN CLASS</a>
+    </div>
+
+    <div class="class-card">
+      <div class="image" style="background-image: url('/stretching.png')"></div>
+      <h3>STRETCHING YOGA</h3>
+      <p>Improve mobility and reduce tension with deep stretches.</p>
+      <div class="meta">
+        <p>08:30 AM - 10:00 AM</p>
+        <p>Monday - Wednesday</p>
+      </div>
+      <a href="#" class="btn-outline">JOIN CLASS</a>
+    </div>
+  </div>
+</section>
 
     <!-- Sezione Insegnanti -->
     <section class="teachers-grid-section">
@@ -194,6 +255,133 @@ const teachers = [
 .intro-image img {
   width: 300px;
   border-radius: 12px;
+}
+
+.teacher-cv-section {
+  background-color: #4b2e83;
+  color: white;
+  padding: 4rem 2rem;
+}
+
+.cv-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.cv-info {
+  flex: 1 1 400px;
+}
+
+.cv-info h2 {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  color: white;
+}
+
+.cv-item {
+  margin-bottom: 1.5rem;
+}
+
+.cv-item h4 {
+  font-size: 0.9rem;
+  font-weight: bold;
+  color: #f3cfff;
+  margin-bottom: 0.3rem;
+}
+
+.cv-item p {
+  font-size: 1rem;
+  margin: 0;
+  color: #fff;
+}
+
+.cv-image {
+  flex: 1 1 300px;
+  text-align: center;
+}
+
+.cv-image img {
+  max-width: 100%;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+.teacher-classes-section {
+  background: #f9f9f9;
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.teacher-classes-section .subtitle {
+  color: #999;
+  font-size: 0.9rem;
+  letter-spacing: 2px;
+  font-weight: 600;
+}
+
+.teacher-classes-section .title {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+}
+
+.teacher-classes-section .title span {
+  color: #e24392;
+}
+
+.classes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.class-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.class-card .image {
+  background-size: cover;
+  background-position: center;
+  height: 160px;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+}
+
+.class-card h3 {
+  font-size: 1.2rem;
+  color: #9024af;
+  margin-bottom: 0.5rem;
+}
+
+.class-card p {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.class-card .meta {
+  margin: 0.8rem 0;
+  font-size: 0.85rem;
+  color: #999;
+}
+
+.class-card .btn-outline {
+  display: inline-block;
+  margin-top: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid #9024af;
+  border-radius: 20px;
+  color: #9024af;
+  text-decoration: none;
+  font-weight: 500;
 }
 
 .teachers-grid {
