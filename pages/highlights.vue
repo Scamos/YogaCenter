@@ -19,11 +19,31 @@
     </nav>
     </section>
 
+    <!-- Barra di ricerca e filtri -->
+<div class="filter-bar">
+  <input
+    type="text"
+    placeholder="Search highlights..."
+    class="search-input"
+    v-model="search"
+  />
+  <div class="category-filters">
+    <button
+      v-for="(cat, i) in ['All', ...categories]"
+      :key="i"
+      :class="['filter-btn', { active: selectedCategory === cat }]"
+      @click="selectedCategory = cat"
+    >
+      {{ cat }}
+    </button>
+  </div>
+</div>
+
     <!-- Contenuto Principale -->
     <div class="container">
       <!-- Lista di classi Highlight -->
       <div class="highlights-list">
-        <div v-for="item in highlights" :key="item.id" class="highlight-card">
+        <div v-for="item in filteredHighlights" :key="item.id" class="highlight-card">
           <div class="image-placeholder">
             <span class="category-label">MEDITATION</span>
           </div>
@@ -38,7 +58,7 @@
         </div>
       </div>
 
-      <!-- Barra laterale -->
+      <!-- Barra laterale
       <aside class="sidebar">
         <div class="search-box">
           <label>SEARCH CLASS</label>
@@ -57,6 +77,7 @@
           </ul>
         </div>
       </aside>
+       -->
     </div>
 
     <Footer />
@@ -64,10 +85,23 @@
 </template>
 
 <script setup>
+import { ref, computed } from 'vue'
+
+const search = ref('')
+const selectedCategory = ref('All')
+
+const filteredHighlights = computed(() => {
+  return highlights.filter((cls) =>
+    (selectedCategory.value === 'All' || cls.category === selectedCategory.value) &&
+    cls.title.toLowerCase().includes(search.value.toLowerCase())
+  )
+})
+
 const highlights = [
   {
     id: 1,
     title: "Yoga For The Mind",
+    category: "Meditation",
     description: "Yoga is the practice of quieting the mind. You need to convince.",
     teacher: "Anna Laurent",
     date: "May 30, 2025",
@@ -76,6 +110,7 @@ const highlights = [
   {
     id: 2,
     title: "Yoga Together",
+    category: "Seminar",
     description: "Work together is essential for small teams challenge.",
     teacher: "Warren Hunt",
     date: "May 19, 2025",
@@ -84,6 +119,7 @@ const highlights = [
   {
     id: 3,
     title: "Mindful Moments",
+    category: "Meditation",
     description: "Learn to pause, breathe, and reconnect with your inner peace.",
     teacher: "Isabelle Grant",
     date: "May 13, 2025",
@@ -109,7 +145,7 @@ const categories = [
   color: #333;
 }
 
-/* Hero Section */
+/* Sezione Titolo */
 .hero {
   background-color: #f2e7fa;
   text-align: center;
@@ -150,7 +186,7 @@ const categories = [
   font-weight: bold;
 }
 
-/* Main Content Layout */
+/* Contenuto Principale */
 .container {
   display: flex;
   flex-wrap: wrap;
@@ -158,7 +194,7 @@ const categories = [
   padding: 2rem 1.5rem;
 }
 
-/* Highlights List */
+/* Lista di Classi Highlight */
 .highlights-list {
   flex: 1 1 70%;
 }
@@ -213,7 +249,7 @@ const categories = [
   text-decoration: none;
 }
 
-/* Sidebar */
+/* Barra Laterale */
 .sidebar {
   flex: 1 1 25%;
   display: flex;
@@ -255,5 +291,46 @@ const categories = [
 .categories li.active {
   color: #6c2fbf;
   font-weight: bold;
+}
+
+/* Barra Laterale Nuova*/ 
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  align-items: center;
+}
+
+.search-input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  max-width: 350px;
+}
+
+.category-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.filter-btn {
+  background: #f0e6f8;
+  color: #7e3f98;
+  border: none;
+  padding: 0.5rem 1.2rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.filter-btn.active {
+  background: #7e3f98;
+  color: white;
 }
 </style>
