@@ -28,11 +28,13 @@
       <span class="dash">–</span>
       <NuxtLink to="/classes" class="breadcrumb-link">OUR CLASSES</NuxtLink> 
       <span class="dash">–</span>
+      <NuxtLink to="/classes" class="breadcrumb-link">HIGHLIGHTS</NuxtLink> 
+      <span class="dash">–</span>
       <a href="#classes-top" class="current">STRETCHING YOGA</a>
     </nav>
     </section>
 
-    <!-- Immagini della Classe e Informazioni -->
+    <!-- Informazioni delle Classi -->
     <section class="class-info">
       <img class="banner" src="/stretching.png" alt="Stretching" />
       <div class="info-block">
@@ -43,7 +45,7 @@
       </div>
     </section>
 
-    <!-- Descrizione e Citazione -->
+    <!-- Descrizione & Citazione -->
     <section class="class-description">
       <h2>Improve Your Flexibility</h2>
       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi.</p>
@@ -75,7 +77,7 @@
         <span class="date">{{ comment.date }}</span>
       </div>
 
-      <!-- Lascia un Commento -->
+      <!-- Lascia un commento -->
       <div class="leave-comment">
         <h4>Leave a Comment <span>*</span></h4>
         <p>* Required fields are marked with an asterisk.</p>

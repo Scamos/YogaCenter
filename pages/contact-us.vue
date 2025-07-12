@@ -1,7 +1,7 @@
 <template>
   <div class="contact-page">
     <Header />
-    <!-- Hero Section -->
+    <!-- Titolo -->
     <section class="contact-hero">
       <Backbutton />
       <p class="subtitle">• MEET US •</p>
@@ -17,7 +17,7 @@
     </nav>
     </section>
 
-    <!-- Contact Content -->
+    <!-- Contenuto dei Contatti -->
     <section class="contact-content">
       <div class="contact-left">
         <div class="placeholder-image"></div>

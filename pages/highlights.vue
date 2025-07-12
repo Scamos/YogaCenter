@@ -1,7 +1,7 @@
 <template>
     <div class="highlights-page">
     <Header />
-    <!-- Hero -->
+    <!-- Titolo -->
     <section class="hero">
       <Backbutton />
       <p class="subheading">DISCOVER OUR CLASSES</p>
@@ -19,9 +19,9 @@
     </nav>
     </section>
 
-    <!-- Main Content -->
+    <!-- Contenuto Principale -->
     <div class="container">
-      <!-- Highlights List -->
+      <!-- Lista di classi Highlight -->
       <div class="highlights-list">
         <div v-for="item in highlights" :key="item.id" class="highlight-card">
           <div class="image-placeholder">
@@ -33,12 +33,12 @@
           <div class="meta">
             <span>📅 {{ item.date }}</span>
             <span>🕒 {{ item.time }}</span>
-            <NuxtLink to="#" class="read-more">READ MORE →</NuxtLink>
+            <NuxtLink :to="`/highlight`" class="read-more">READ MORE →</NuxtLink>
           </div>
         </div>
       </div>
 
-      <!-- Sidebar -->
+      <!-- Barra laterale -->
       <aside class="sidebar">
         <div class="search-box">
           <label>SEARCH CLASS</label>
