@@ -104,7 +104,7 @@
       <p>{{ alwaysVisibleClass.time }}</p>
       <p>{{ alwaysVisibleClass.days }}</p>
     </div>
-    <a href="#" class="btn-pink">JOIN CLASS</a>
+    <NuxtLink to="/highlights" class="btn-pink">SEE HIGHLIGHTS</NuxtLink>
   </div>
 </div>
   </section>

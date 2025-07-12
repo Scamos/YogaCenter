@@ -9,7 +9,7 @@
     </section>
 
     <!-- Breadcrumb -->
-     <section class="classes-content">
+     <section class="breacrumb-content">
     <nav class="breadcrumb">
       <NuxtLink to="/" class="breadcrumb-link">HOME</NuxtLink>
       <span class="dash">–</span>
