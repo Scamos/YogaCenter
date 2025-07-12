@@ -24,11 +24,11 @@
     <!-- Breadcrumb -->
      <section class="classes-content">
     <nav class="breadcrumb">
-      <NuxtLink to="/" class="breadcrumb-link">Home</NuxtLink> 
+      <NuxtLink to="/" class="breadcrumb-link">HOME</NuxtLink> 
       <span class="dash">–</span>
-      <NuxtLink to="/classes" class="breadcrumb-link">Classes</NuxtLink> 
+      <NuxtLink to="/classes" class="breadcrumb-link">CLASSES</NuxtLink> 
       <span class="dash">–</span>
-      <a href="#classes-top" class="current">Stretching Yoga</a>
+      <a href="#classes-top" class="current">STRETCHING YOGA</a>
     </nav>
     </section>
 

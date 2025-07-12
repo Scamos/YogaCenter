@@ -127,7 +127,8 @@
 /* Usando <script setup>, l'importazione di header e footer
 avviene automaticamente (file presenti in components/)
 grazie all’auto-import di Nuxt 3, quindi si può anche non
-scrivere l'import, ma per completezza viene inserito */
+scrivere l'import, ma per completezza viene inserito 
+almeno per questa volta*/
 import Header from '@/components/header.vue'
 import Footer from '@/components/footer.vue'
 </script>

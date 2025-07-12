@@ -10,9 +10,9 @@
     <!-- Breadcrumb -->
       <section class="classes-content">
       <nav class="breadcrumb">
-        <NuxtLink to="/" class="breadcrumb-link">Home</NuxtLink>
+        <NuxtLink to="/" class="breadcrumb-link">HOME</NuxtLink>
         <span class="dash">–</span>
-        <a href="#classes-top" class="current">Our Teachers</a>
+        <a href="#classes-top" class="current">OUR TEACHERS</a>
       </nav>
       </section>
 
