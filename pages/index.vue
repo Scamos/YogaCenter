@@ -150,37 +150,19 @@
       <p class="subtitle">OUR YOGA TEACHERS</p>
       <h2 class="title">IT’S ALL ABOUT <span>THE PEOPLE</span></h2>
     </div>
+    
     <div class="teacher-grid">
-      <div class="teacher-card">
-        <img src="/public/YogaTeacher1.png" alt="Laura Dover">
-        <h4>LAURA DOVER</h4>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.</p>
+      <div v-for="(teacher, index) in teachers.slice(0, 3)" :key="teacher.id" class="teacher-card">
+        <img :src="teacher.image_url" :alt="`${teacher.name} ${teacher.surname}`" />
+        <h4>{{ teacher.name.toUpperCase() }} {{ teacher.surname.toUpperCase() }}</h4>
+        <p>{{ teacher.brief_description }}</p>
         <div class="social-icons">
           <i class="fab fa-facebook-f"></i>
           <i class="fab fa-twitter"></i>
           <i class="fab fa-instagram"></i>
         </div>
       </div>
-      <div class="teacher-card">
-        <img src="/public/YogaTeacher2.png" alt="Anna Laurent">
-        <h4>ANNA LAURENT</h4>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.</p>
-        <div class="social-icons">
-          <i class="fab fa-facebook-f"></i>
-          <i class="fab fa-twitter"></i>
-          <i class="fab fa-instagram"></i>
-        </div>
-      </div>
-      <div class="teacher-card">
-        <img src="/public/YogaTeacher3.png" alt="Mark Willie">
-        <h4>MARK WILLIE</h4>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.</p>
-        <div class="social-icons">
-          <i class="fab fa-facebook-f"></i>
-          <i class="fab fa-twitter"></i>
-          <i class="fab fa-instagram"></i>
-        </div>
-      </div>
+      
       <div class="teacher-card discover">
         <img src="/public/YogaTeachers.png" alt="Discover all teachers">
         <h4>DISCOVER ALL TEACHERS</h4>
@@ -237,6 +219,7 @@ import { onMounted, ref } from 'vue'
 const client = useSupabaseClient()
 const classCards = ref([])
 const classes = ref([])
+const teachers = ref([])
 
 onMounted(async () => {
   const { data, error } = await client
@@ -266,6 +249,19 @@ onMounted(async () => {
     console.error('Errore nel recupero delle classi:', error)
   } else {
     classes.value = data
+  }
+})
+
+onMounted(async () => {
+  const { data, error } = await client
+    .from('teachers')
+    .select('*')
+    .order('id', { ascending: true })
+
+  if (error) {
+    console.error('Errore nel recupero degli insegnanti:', error)
+  } else {
+    teachers.value = data
   }
 })
 
