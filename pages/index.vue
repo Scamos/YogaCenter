@@ -237,12 +237,21 @@ const client = useSupabaseClient()
 const classCards = ref([])
 
 onMounted(async () => {
-  const { data, error } = await client.from('highlight_classes').select('*')
+  const { data, error } = await client
+    .from('highlight_classes')
+    .select('*')
+    .order('id', { ascending: true })
+
   if (error) {
     console.error(error)
-  } else {
-    classCards.value = data
+    return
   }
+
+  const topThree = data.filter(c => c.tag?.toLowerCase() !== 'learn more').slice(0, 3)
+  const learnMoreCard = data.find(c => c.tag?.toLowerCase() === 'learn more')
+
+  // Combina i primi 3 con la card Learn More, se esiste
+  classCards.value = learnMoreCard ? [...topThree, learnMoreCard] : topThree
 })
 
 /*
