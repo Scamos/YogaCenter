@@ -74,12 +74,12 @@
       <div class="class-grid">
         <!-- Carta per una Classe -->
         <div v-for="(card, index) in classCards" :key="index" class="class-card">
-          <div class="class-image">
+          <div class="class-image" :style="{ backgroundImage: `url(${card.image_url})` }">
             <span class="tag">{{ card.tag }}</span>
           </div>
           <div class="class-content">
             <div class="meta">
-              <span>Teacher: {{ card.teacher }}</span>
+              <span>Teachers: {{ Array.isArray(card.teacher) ? card.teacher.join(', ') : card.teacher }}</span>
               <span>{{ card.date }}</span>
             </div>
             <h4 class="class-title">{{ card.title }}</h4>
@@ -231,38 +231,19 @@
 </template>
 
 <script setup>
-const classCards = [
-  {
-    tag: 'Meditation',
-    teacher: 'Anna Laurent',
-    date: 'May 30, 2025',
-    title: 'Yoga Is The Practice Of Quieting The Mind You Need To Convince',
-    cta: 'READ MORE'
-  },
-  {
-    tag: 'Personal Growth Workshops',
-    teacher: 'Women Hunt',
-    date: 'May 18, 2025',
-    title: 'Work Together Is Essential For Small Teams Challenge',
-    cta: 'READ MORE'
-  },
-  {
-    tag: 'Holistic Treatments',
-    teacher: 'Anna Laurent',
-    date: 'May 23, 2025',
-    title: 'Try Our Methods For Some Holistic Treatments And Feel Yourself Reborn',
-    cta: 'READ MORE'
-  },
-  {
-    tag: 'Learn More?',
-    teacher: 'All the Teachers',
-    date: 'Everyday',
-    title: 'Discover All The Highlight Classes!',
-    cta: 'LEARN MORE'
-  }
-]
+import { onMounted, ref } from 'vue'
 
 const client = useSupabaseClient()
+const classCards = ref([])
+
+onMounted(async () => {
+  const { data, error } = await client.from('highlight_classes').select('*')
+  if (error) {
+    console.error(error)
+  } else {
+    classCards.value = data
+  }
+})
 
 /*
 const instruments = ref([])
