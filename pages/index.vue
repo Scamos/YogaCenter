@@ -100,17 +100,17 @@
       <h2 class="title">OFFERING <span>CLASSES</span></h2>
     </div>
     <div class="grid">
-      <div class="class-card">
-        <div class="image"></div>
-        <h3>STRETCHING YOGA</h3>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed.</p>
+      <div v-for="classItem in classes" :key="classItem.id" class="class-card">
+        <div :style="{ backgroundImage: `url(${classItem.image_url})` }" class="image"></div>
+        <h3>{{ classItem.title }}</h3>
+        <p>{{ classItem.description }}</p>
         <div class="meta">
-          <p>08:30 AM - 10:00 AM</p>
-          <p>Monday - Wednesday</p>
+          <p>{{ classItem.time }}</p>
+          <p>{{ classItem.date }}</p>
         </div>
-        <a href="#" class="btn-outline">JOIN CLASS</a>
+        <a href="#" class="btn-outline">{{ classItem.cta }}</a>
       </div>
-      <div class="class-card">
+      <!-- <div class="class-card">
         <div class="image"></div>
         <h3>BODY BALANCE</h3>
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed.</p>
@@ -140,6 +140,7 @@
         </div>
         <a href="#" class="btn-outline">LEARN MORE</a>
       </div>
+    -->
     </div>
   </section>
 
@@ -235,6 +236,7 @@ import { onMounted, ref } from 'vue'
 
 const client = useSupabaseClient()
 const classCards = ref([])
+const classes = ref([])
 
 onMounted(async () => {
   const { data, error } = await client
@@ -252,6 +254,19 @@ onMounted(async () => {
 
   // Combina i primi 3 con la card Learn More, se esiste
   classCards.value = learnMoreCard ? [...topThree, learnMoreCard] : topThree
+})
+
+onMounted(async () => {
+  const { data, error } = await client
+    .from('classes')
+    .select('*')
+    .order('date', { ascending: true })
+
+  if (error) {
+    console.error('Errore nel recupero delle classi:', error)
+  } else {
+    classes.value = data
+  }
 })
 
 /*
