@@ -130,6 +130,7 @@
         </div>
         <a href="#" class="btn-outline">JOIN CLASS</a>
       </div>
+      -->
       <div class="class-card">
         <div class="image"></div>
         <h3>LEARN MORE?</h3>
@@ -140,7 +141,6 @@
         </div>
         <a href="#" class="btn-outline">LEARN MORE</a>
       </div>
-    -->
     </div>
   </section>
 
