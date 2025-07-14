@@ -153,6 +153,7 @@
     
     <div class="teacher-grid">
       <div v-for="(teacher, index) in teachers.slice(0, 3)" :key="teacher.id" class="teacher-card">
+      <NuxtLink :to="`/teachers/${teacher.id}`" class="teacher-card-link">
         <img :src="teacher.image_url" :alt="`${teacher.name} ${teacher.surname}`" />
         <h4>{{ teacher.name.toUpperCase() }} {{ teacher.surname.toUpperCase() }}</h4>
         <p>{{ teacher.brief_description }}</p>
@@ -161,6 +162,7 @@
           <i class="fab fa-twitter"></i>
           <i class="fab fa-instagram"></i>
         </div>
+      </NuxtLink>
       </div>
       
       <div class="teacher-card discover">

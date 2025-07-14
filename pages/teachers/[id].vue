@@ -1,7 +1,4 @@
 <template>
-  <!-- File statico creato solamente come aiuto durante l'implementazione di quello dinamico.
-   Provando a rimuoverlo, diceva che il file era presente nel percorso e in nuxt; dunque,
-   per mancanza di tempo nel cercare di capire questa tipologia di errore, è stato lasciato -->
     <div class="teachers-page">
     <Header />
     <section class="teachers-hero">
@@ -17,22 +14,22 @@
         <span class="dash">–</span>
         <NuxtLink to="/teachers" class="breadcrumb-link">OUR TEACHERS</NuxtLink>
         <span class="dash">–</span>
-        <a href="#classes-top" class="current">ANNA LAURENT</a>
+        <a href="#classes-top" class="current">{{ teacher.name.split(' ')[0].toUpperCase() }} {{ teacher.surname.split(' ')[0].toUpperCase() }}</a>
       </nav>
       </section>
 
       <div class="intro-section">
         <div class="intro-text">
-          <p class="section-subtitle">• YOGA EXPERT •</p>
-          <h2 class="section-title">MEET <span class="highlight">ANNA</span></h2>
+          <p class="section-subtitle">• {{ teacher.main_expertise[0]?.toUpperCase() }} EXPERT •</p>
+          <h2 class="section-title">MEET <span class="highlight">{{ teacher.name.split(' ')[0].toUpperCase() }}</span></h2>
           <p class="intro-description">
-            Our yoga teacher is more than an instructor – She is a mentor, guide and wellness expert that shape your path with care and passion.
+            {{ teacher.brief_description }}
           </p>
-          <h3 class="featured-name">ANNA LAURENT</h3>
-          <p class="position">Yoga Expert</p>
+          <h3 class="featured-name">{{ teacher.name.split(' ')[0].toUpperCase() }} {{ teacher.surname.split(' ')[0].toUpperCase() }}</h3>
+          <p class="position">{{ teacher.main_expertise[0] }} Expert</p>
         </div>
         <div class="intro-image">
-          <img src="/YogaTeacher.png" alt="Featured Teacher" />
+          <img :src="teacher.image_url" :alt="`${teacher.name} ${teacher.surname}`" />
         </div>
       </div>
 
@@ -43,25 +40,52 @@
       <h2>Curriculum Information</h2>
       <div class="cv-item">
         <h4>EDUCATION</h4>
-        <p>Yoga Institute of San Francisco</p>
+        <div v-if="teacher.education && teacher.education.length">
+    <p
+      v-for="(item, index) in formattedPairs(teacher.education)"
+      :key="index"
+    >
+      {{ item }}
+    </p>
+  </div>
       </div>
       <div class="cv-item">
-        <h4>CERTIFICATIONS</h4>
-        <p>RYT-500 Yoga Alliance</p>
+        <h4>MAIN EXPERTISE</h4>
+        <div v-if="teacher.main_expertise?.length">
+    <p v-for="(item, index) in formattedPairs(teacher.main_expertise)" :key="index">
+      {{ item }}
+    </p>
+  </div>
       </div>
       <div class="cv-item">
-        <h4>EXPERIENCE</h4>
-        <p>10+ Years of Teaching</p>
+        <h4>PERSONAL SKILLS</h4>
+        <div v-if="teacher.personal_skills?.length">
+    <p v-for="(item, index) in formattedPairs(teacher.personal_skills)" :key="index">
+      {{ item }}
+    </p>
+  </div>
       </div>
       <div class="cv-item">
         <h4>LANGUAGES</h4>
-        <p>English, French, Sanskrit</p>
+        <div v-if="teacher.languages?.length">
+    <p v-for="(item, index) in formattedPairs(teacher.languages)" :key="index">
+      {{ item }}
+    </p>
+  </div>
       </div>
     </div>
+    <div class="cv-item">
+  <h4>WHY YOGA</h4>
+  <div v-if="teacher.why_yoga?.length">
+    <p v-for="(item, index) in formattedPairs(teacher.why_yoga)" :key="index">
+      {{ item }}
+    </p>
+  </div>
+</div>
 
     <!-- Immagine -->
     <div class="cv-image">
-      <img src="/public/YogaTeacher2.png" alt="Anna Laurent full body" />
+      <img :src="teacher.image_url" :alt="`${teacher.name} ${teacher.surname}`" />
     </div>
   </div>
 </section>
@@ -103,24 +127,22 @@
       </div>
 
       <div class="teachers-grid">
-      <div class="teacher-card">
-      <NuxtLink
-        v-for="(teacher, index) in teachers"
-        :key="index"
-        to="/teacher"
-        class="teacher-card-link"
-      >
-          <img :src="teacher.image" :alt="teacher.name" />
-          <h4>{{ teacher.name }}</h4>
-          <p>{{ teacher.description }}</p>
-          <div class="social-icons">
-            <i class="fab fa-facebook-f"></i>
-            <i class="fab fa-twitter"></i>
-            <i class="fab fa-instagram"></i>
-          </div>
-        </NuxtLink>
-        </div>
-        </div>
+  <NuxtLink
+    v-for="t in allTeachers"
+    :key="t.id"
+    :to="`/teachers/${t.id}`"
+    class="teacher-card teacher-card-link"
+  >
+    <img :src="t.image_url" :alt="`${t.name} ${t.surname}`" />
+    <h4>{{ t.name }} {{ t.surname }}</h4>
+    <p>{{ t.brief_description }}</p>
+    <div class="social-icons">
+      <i class="fab fa-facebook-f"></i>
+      <i class="fab fa-twitter"></i>
+      <i class="fab fa-instagram"></i>
+    </div>
+  </NuxtLink>
+</div>
     </section>
 
     <!-- Sezione per i Contatti -->
@@ -142,29 +164,44 @@
 </template>
 
 <script setup>
-// Qui posso inserire fetch dinamici da Supabase in futuro
-const teachers = [
-  {
-    name: 'Laura Dover',
-    image: '/YogaTeacher.png',
-    description: 'Certified instructor specialized in flexibility and mindful breathing.',
-  },
-  {
-    name: 'Anna Laurent',
-    image: '/YogaTeacher1.png',
-    description: 'Focused on balance, strength and positive mental habits.',
-  },
-  {
-    name: 'Mark Willie',
-    image: '/YogaTeacher2.png',
-    description: 'Expert in guided meditation and body-mind integration.',
-  },
-  {
-    name: 'Janet Hugh',
-    image: '/YogaTeacher3.png',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.',
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
+const client = useSupabaseClient()
+
+// Teacher attuale
+const { data: teacher, pending, error } = await useAsyncData('teacher', async () => {
+  const { data, error } = await client
+    .from('teachers')
+    .select('*')
+    .eq('id', route.params.id)
+    .single()
+
+  if (error) throw error
+  return data
+})
+
+// Tutti gli insegnanti
+const { data: allTeachers } = await useAsyncData('allTeachers', async () => {
+  const { data, error } = await client
+    .from('teachers')
+    .select('*')
+    .eq('id', route.params.id)
+
+  if (error) throw error
+  return data
+})
+
+function formattedPairs(arr) {
+  const result = []
+  for (let i = 0; i < arr.length; i += 2) {
+    const key = arr[i]
+    const value = arr[i + 1] || ''
+    const pair = `${key}: ${value}${i + 2 < arr.length ? ',' : ''}`
+    result.push(pair)
   }
-]
+  return result
+}
 </script>
 
 <style scoped>
