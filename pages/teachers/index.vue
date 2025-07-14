@@ -39,23 +39,21 @@
       </div>
 
       <div class="teachers-grid">
-      <div class="teacher-card">
       <NuxtLink
-        v-for="(teacher, index) in teachers"
-        :key="index"
-        to="/teacher"
-        class="teacher-card-link"
-      >
-          <img :src="teacher.image" :alt="teacher.name" />
-          <h4>{{ teacher.name }}</h4>
-          <p>{{ teacher.description }}</p>
+          v-for="teacher in teachers"
+          :key="teacher.id"
+          :to="`/teachers/${teacher.id}`"
+          class="teacher-card teacher-card-link"
+        >
+          <img :src="teacher.image_url" :alt="`${teacher.name} ${teacher.surname}`" />
+          <h4>{{ teacher.name }} {{ teacher.surname }}</h4>
+          <p>{{ teacher.brief_description }}</p>
           <div class="social-icons">
             <i class="fab fa-facebook-f"></i>
             <i class="fab fa-twitter"></i>
             <i class="fab fa-instagram"></i>
           </div>
         </NuxtLink>
-        </div>
         </div>
     </section>
 
@@ -78,29 +76,20 @@
 </template>
 
 <script setup>
-// Qui posso inserire fetch dinamici da Supabase in futuro
-const teachers = [
-  {
-    name: 'Laura Dover',
-    image: '/YogaTeacher.png',
-    description: 'Certified instructor specialized in flexibility and mindful breathing.',
-  },
-  {
-    name: 'Anna Laurent',
-    image: '/YogaTeacher1.png',
-    description: 'Focused on balance, strength and positive mental habits.',
-  },
-  {
-    name: 'Mark Willie',
-    image: '/YogaTeacher2.png',
-    description: 'Expert in guided meditation and body-mind integration.',
-  },
-  {
-    name: 'Janet Hugh',
-    image: '/YogaTeacher3.png',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.',
+const client = useSupabaseClient()
+const teachers = ref([])
+
+onMounted(async () => {
+  const { data, error } = await client
+    .from('teachers')
+    .select('id, name, surname, brief_description, image_url')
+
+  if (error) {
+    console.error('Errore nel recupero insegnanti:', error.message)
+  } else {
+    teachers.value = data
   }
-]
+})
 </script>
 
 <style scoped>
