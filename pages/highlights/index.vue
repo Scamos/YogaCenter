@@ -46,7 +46,7 @@
         <div v-if="pending">Loading highlights...</div>
         <div v-else-if="error">Error loading highlights.</div>
         <div v-else v-for="item in filteredHighlights" :key="item.id" class="highlight-card">
-          <div class="image-placeholder">
+          <div class="highlight-image" :style="{ backgroundImage: `url(${item.image_url})` }">
             <span class="category-label">{{ item.type }}</span>
           </div>
           <h2>{{ item.title }}</h2>
@@ -229,9 +229,11 @@ const filteredHighlights = computed(() => {
   border-bottom: 1px solid #ddd;
   padding-bottom: 2rem;
 }
-.image-placeholder {
+.highlight-image {
   height: 200px;
-  background-color: #ccc;
+  background-size: cover;
+  background-position: center;
+  border-radius: 8px;
   position: relative;
   margin-bottom: 1rem;
 }
