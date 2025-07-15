@@ -21,8 +21,8 @@
     <section class="hero">
       <h1>YOGA <span class="highlight">CENTER</span></h1>
       <div class="hero-buttons">
-        <button class="btn-primary">JOIN CLASSES</button>
-        <button class="btn-secondary">DISCOVER SERVICES</button>
+        <NuxtLink to="/classes" class="btn-primary">JOIN CLASSES</NuxtLink>
+        <NuxtLink to="/services" class="btn-secondary">DISCOVER SERVICES</NuxtLink>
       </div>
     </section>
 
@@ -49,7 +49,7 @@
       <p>
         We believe that every person has the capacity to change themselves, and we provide the place, the resources and the support needed to help everyone unlock their potential.
       </p>
-      <a href="#" class="contact-link">CONTACT US</a>
+      <NuxtLink to="/contact-us" class="contact-link">CONTACT US</NuxtLink>
     </section>
 
     <!-- Sezione Introduttiva -->
@@ -79,14 +79,14 @@
           </div>
           <div class="class-content">
             <div class="meta">
-              <span>Teachers: {{ Array.isArray(card.teacher) ? card.teacher.join(', ') : card.teacher }}</span>
+              <span>Teachers: {{ card.teacher_names?.map(t => `${t.name} ${t.surname}`).join(', ') }}</span>
               <span>{{ card.date }}</span>
             </div>
             <h4 class="class-title">{{ card.title }}</h4>
             <div class="cta-container">
-              <a href="#" class="cta-link">
+              <NuxtLink :to="`/highlights/${card.id}`" class="cta-link">
                 {{ card.cta }}<span class="dot">&#8226;</span>
-              </a>
+              </NuxtLink>
             </div>
           </div>
         </div>
@@ -100,7 +100,7 @@
       <h2 class="title">OFFERING <span>CLASSES</span></h2>
     </div>
     <div class="grid">
-      <div v-for="classItem in classes" :key="classItem.id" class="class-card">
+      <div v-for="classItem in classes.slice(0, 3)" :key="classItem.id" class="class-card">
         <div :style="{ backgroundImage: `url(${classItem.image_url})` }" class="image"></div>
         <h3>{{ classItem.title }}</h3>
         <p>{{ classItem.description }}</p>
@@ -108,7 +108,7 @@
           <p>{{ classItem.time }}</p>
           <p>{{ classItem.date }}</p>
         </div>
-        <a href="#" class="btn-outline">{{ classItem.cta }}</a>
+        <NuxtLink :to="`/classes/${classItem.id}`" class="btn-outline">{{ classItem.cta }}</NuxtLink>
       </div>
       <!-- <div class="class-card">
         <div class="image"></div>
@@ -139,7 +139,7 @@
           <p>Anytime</p>
           <p>Everyday</p>
         </div>
-        <a href="#" class="btn-outline">LEARN MORE</a>
+        <NuxtLink to="/classes" class="btn-outline">LEARN MORE</NuxtLink>
       </div>
     </div>
   </section>
@@ -168,7 +168,7 @@
       <div class="teacher-card discover">
         <img src="/public/YogaTeachers.png" alt="Discover all teachers">
         <h4>DISCOVER ALL TEACHERS</h4>
-        <a href="#" class="btn-pink">LEARN MORE</a>
+        <NuxtLink to="/teachers" class="btn-pink">LEARN MORE</NuxtLink>
       </div>
     </div>
   </section>
@@ -180,7 +180,7 @@
   <p class="plan-description">
     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore.
   </p>
-  <p class="learn-center">Join us in our center! <a href="#">LEARN MORE</a></p>
+  <p class="learn-center">Join us in our center! <NuxtLink to="/services">LEARN MORE</NuxtLink></p>
 
   <div class="plans">
     <div class="plan-card standard">
@@ -192,7 +192,7 @@
         <li>No Hidden Fees</li>
         <li>No Ancillaries Access</li>
       </ul>
-      <button class="btn-disabled">GET STARTED</button>
+      <NuxtLink to="/services" class="btn-disabled">GET STARTED</NuxtLink>
     </div>
 
     <div class="plan-card premium">
@@ -205,7 +205,7 @@
         <li>No Hidden Fees</li>
         <li>Ancillaries Access</li>
       </ul>
-      <button class="btn-pink">GET STARTED</button>
+      <NuxtLink to="/services" class="btn-pink">GET STARTED</NuxtLink>
     </div>
   </div>
 </section>
@@ -235,10 +235,25 @@ onMounted(async () => {
   }
 
   const topThree = data.filter(c => c.tag?.toLowerCase() !== 'learn more').slice(0, 3)
-  const learnMoreCard = data.find(c => c.tag?.toLowerCase() === 'learn more')
+  //const learnMoreCard = data.find(c => c.tag?.toLowerCase() === 'learn more')
 
   // Combina i primi 3 con la card Learn More, se esiste
-  classCards.value = learnMoreCard ? [...topThree, learnMoreCard] : topThree
+  //classCards.value = learnMoreCard ? [...topThree, learnMoreCard] : topThree
+  const { data: teacherList, error: teacherError } = await client
+    .from('teachers')
+    .select('*')
+
+  if (teacherError) {
+    console.warn('Teacher fetch error:', teacherError)
+  }
+
+  classCards.value = topThree.map(c => {
+    const matchedTeachers = teacherList?.filter(t => c.teacher_id?.includes(t.uuid)) || []
+    return {
+      ...c,
+      teacher_names: matchedTeachers
+    }
+  })
 })
 
 onMounted(async () => {
