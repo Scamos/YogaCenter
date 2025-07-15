@@ -94,9 +94,9 @@
       </div>
     </div>
 
-    <div class="class-grid">
+    <div class="class-grid" v-if="discoverImageUrl">
     <div class="class-card">
-    <img src="/discoverhighlights.png" alt="Discover Highlights" class="class-img" />
+    <img :src="discoverImageUrl" alt="Discover Highlights" class="class-img" />
     <h3>WANT TO SEE MORE?</h3>
     <p>Discover all our highlight classes by clicking on this.</p>
     <div class="meta">
@@ -118,6 +118,21 @@ import { ref, computed } from 'vue'
 const client = useSupabaseClient()
 const search = ref('')
 const selectedCategory = ref('All')
+const discoverImageUrl = ref('')
+
+// All’avvio recupera l'immagine "discoverhighlights.png" dal bucket
+onMounted(async () => {
+  const { data, error } = await client
+    .storage
+    .from('yogacenter')
+    .getPublicUrl('discoverhighlights.png')
+
+  if (!error) {
+    discoverImageUrl.value = data.publicUrl
+  } else {
+    console.error('Errore nel caricamento dell’immagine statica:', error.message)
+  }
+})
 
 // Filtri basati su campo "type"
 const categories = [
