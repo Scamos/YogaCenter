@@ -72,14 +72,22 @@
       </h2>
 
       <div class="class-grid">
-        <!-- Carta per una Classe -->
-        <div v-for="(card, index) in classCards" :key="index" class="class-card">
+        <!-- Carte per le classi highlight dinamiche (massimo 3) -->
+        <div 
+        v-for="card in classCards"
+        :key="card.id"
+        class="class-card"
+        >
           <div class="class-image" :style="{ backgroundImage: `url(${card.image_url})` }">
             <span class="tag">{{ card.tag }}</span>
           </div>
           <div class="class-content">
             <div class="meta">
-              <span>Teachers: {{ card.teacher_names?.map(t => `${t.name} ${t.surname}`).join(', ') }}</span>
+              <span>Teachers:
+              <span v-for="(t, i) in card.teacher_names" :key="i">
+              {{ t.name }} {{ t.surname }} <span v-if="i < card.teacher_names.length - 1">, </span>
+              </span>
+              </span>
               <span>{{ card.date }}</span>
             </div>
             <h4 class="class-title">{{ card.title }}</h4>
@@ -90,6 +98,25 @@
             </div>
           </div>
         </div>
+
+        <!-- Carta statica LEARN MORE? -->
+  <div class="class-card">
+    <div class="class-image" style="background-image: url('/discoverhighlights.png')">
+      <span class="tag">SEE MORE</span>
+    </div>
+    <div class="class-content">
+      <div class="meta">
+        <span>Anytime</span>
+        <span>Everyday</span>
+      </div>
+      <h4 class="class-title">LEARN MORE?</h4>
+      <div class="cta-container">
+        <NuxtLink to="/highlights" class="cta-link">
+          DISCOVER HIGHLIGHTS<span class="dot">&#8226;</span>
+        </NuxtLink>
+      </div>
+    </div>
+  </div>
       </div>
     </section>
 
@@ -132,7 +159,10 @@
       </div>
       -->
       <div class="class-card">
-        <div class="image"></div>
+        <div 
+        class="image"
+        :style="{ backgroundImage: `url(${discoverHighlightsUrl})` }"
+        ></div>
         <h3>LEARN MORE?</h3>
         <p>Discover all the Classes!</p>
         <div class="meta">
@@ -166,7 +196,7 @@
       </div>
       
       <div class="teacher-card discover">
-        <img src="/public/YogaTeachers.png" alt="Discover all teachers">
+        <img :src="discoverTeachersUrl" alt="Discover all teachers" />
         <h4>DISCOVER ALL TEACHERS</h4>
         <NuxtLink to="/teachers" class="btn-pink">LEARN MORE</NuxtLink>
       </div>
@@ -222,6 +252,30 @@ const client = useSupabaseClient()
 const classCards = ref([])
 const classes = ref([])
 const teachers = ref([])
+const discoverHighlightsUrl = ref('')
+const discoverTeachersUrl = ref('')
+
+onMounted(async () => {
+  // Recupera immagine per "LEARN MORE?" card (classi)
+  const { data: highlightsImg, error: err1 } = await client
+    .storage
+    .from('yogacenter')
+    .getPublicUrl('discoverclasses.png')
+
+  if (!err1) {
+    discoverHighlightsUrl.value = highlightsImg.publicUrl
+  }
+
+  // Recupera immagine per "DISCOVER ALL TEACHERS" card
+  const { data: teachersImg, error: err2 } = await client
+    .storage
+    .from('yogacenter')
+    .getPublicUrl('YogaTeachers.png')
+
+  if (!err2) {
+    discoverTeachersUrl.value = teachersImg.publicUrl
+  }
+})
 
 onMounted(async () => {
   const { data, error } = await client
