@@ -119,11 +119,11 @@ onMounted(async () => {
       const teacherId = data.teacher_id[0]
       const { data: teacherData, error: teacherError } = await client
         .from('teachers')
-        .select('id, name, surname, image_url')
+        .select('id, name, surname, image_url, uuid')
         .in('uuid', data.teacher_id)
 
       if (!teacherError) {
-        teacher.value = teacherData
+        teacher.value = teacherData?.[0] ?? null
       } else {
         console.warn('Errore nel recupero insegnante:', teacherError)
       }
