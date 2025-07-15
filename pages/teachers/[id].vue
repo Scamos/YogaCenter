@@ -95,28 +95,27 @@
   <h2 class="title">WHAT I <span>TEACH</span></h2>
 
   <div class="classes-grid">
-    <div class="class-card">
-      <div class="image" style="background-image: url('/meditation.png')"></div>
-      <h3>MEDITATION YOGA</h3>
-      <p>Find your inner balance through breath and mindfulness.</p>
-      <div class="meta">
-        <p>08:30 AM - 10:00 AM</p>
-        <p>Friday - Sunday</p>
-      </div>
-      <a href="#" class="btn-outline">JOIN CLASS</a>
+    <div 
+    v-for="classItem in teacherClasses" 
+    :key="classItem.id" 
+    class="class-card"
+  >
+    <div 
+      class="image" 
+      :style="`background-image: url('${classItem.image_url}')`"
+    ></div>
+    <h3>{{ classItem.title }}</h3>
+    <p>{{ classItem.description }}</p>
+    <div class="meta">
+      <p>{{ classItem.time }}</p>
+      <p>{{ classItem.date }}</p>
     </div>
-
-    <div class="class-card">
-      <div class="image" style="background-image: url('/stretching.png')"></div>
-      <h3>STRETCHING YOGA</h3>
-      <p>Improve mobility and reduce tension with deep stretches.</p>
-      <div class="meta">
-        <p>08:30 AM - 10:00 AM</p>
-        <p>Monday - Wednesday</p>
-      </div>
-      <a href="#" class="btn-outline">JOIN CLASS</a>
-    </div>
+    <NuxtLink :to="`/classes/${classItem.id}`" class="btn-outline">{{ classItem.cta }}</NuxtLink>
   </div>
+  </div>
+  <p v-if="teacherClasses?.length === 0" class="no-classes-msg">
+  This teacher currently has no classes scheduled.
+</p>
 </section>
 
     <!-- Sezione Insegnanti -->
@@ -202,6 +201,16 @@ function formattedPairs(arr) {
   }
   return result
 }
+
+const { data: teacherClasses } = await useAsyncData('teacherClasses', async () => {
+  const { data, error } = await client
+    .from('classes')
+    .select('*')
+    .contains('teacher_id', [teacher.uuid])
+
+  if (error) throw error
+  return data
+})
 </script>
 
 <style scoped>
