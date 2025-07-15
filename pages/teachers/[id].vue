@@ -94,9 +94,29 @@
   <p class="subtitle">CLASSES BY THIS TEACHER</p>
   <h2 class="title">WHAT I <span>TEACH</span></h2>
 
-  <div class="classes-grid">
+  <div v-if="teacherClasses?.length" class="classes-grid">
     <div 
     v-for="classItem in teacherClasses" 
+    :key="classItem.id" 
+    class="class-card"
+    >
+    <div 
+      class="image" 
+      :style="`background-image: url('${classItem.image_url}')`"
+    ></div>
+    <h3>{{ classItem.title }}</h3>
+    <p>{{ classItem.description }}</p>
+    <div class="meta">
+      <p>{{ classItem.time }}</p>
+      <p>{{ classItem.date }}</p>
+    </div>
+    <NuxtLink :to="`/classes/${classItem.id}`" class="btn-outline">{{ classItem.cta }}</NuxtLink>
+    </div>
+  </div>
+
+  <div v-if="teacherHighlights?.length" class="classes-grid">
+  <div 
+    v-for="classItem in teacherHighlights" 
     :key="classItem.id" 
     class="class-card"
   >
@@ -110,9 +130,12 @@
       <p>{{ classItem.time }}</p>
       <p>{{ classItem.date }}</p>
     </div>
-    <NuxtLink :to="`/classes/${classItem.id}`" class="btn-outline">{{ classItem.cta }}</NuxtLink>
+    <NuxtLink :to="`/highlights/${classItem.id}`" class="btn-outline">
+      {{ classItem.cta }}
+    </NuxtLink>
   </div>
-  </div>
+</div>
+
   <p v-if="teacherClasses?.length === 0" class="no-classes-msg">
   This teacher currently has no classes scheduled.
 </p>
@@ -205,6 +228,16 @@ function formattedPairs(arr) {
 const { data: teacherClasses } = await useAsyncData('teacherClasses', async () => {
   const { data, error } = await client
     .from('classes')
+    .select('*')
+    .contains('teacher_id', [teacher.uuid])
+
+  if (error) throw error
+  return data
+})
+
+const { data: teacherHighlights } = await useAsyncData('teacherHighlights', async () => {
+  const { data, error } = await client
+    .from('highlight_classes')
     .select('*')
     .contains('teacher_id', [teacher.uuid])
 
