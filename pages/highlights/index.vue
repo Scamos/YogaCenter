@@ -43,6 +43,30 @@
     <div class="container">
       <!-- Lista di classi Highlight -->
       <div class="highlights-list">
+        <div v-if="pending">Loading highlights...</div>
+        <div v-else-if="error">Error loading highlights.</div>
+        <div v-else v-for="item in filteredHighlights" :key="item.id" class="highlight-card">
+          <div class="image-placeholder">
+            <span class="category-label">{{ item.type }}</span>
+          </div>
+          <h2>{{ item.title }}</h2>
+          <p class="description">{{ item.description }}</p>
+          <p class="teacher">
+            👤 Teachers:
+            <span v-for="(t, i) in item.teacher" :key="i">
+              {{ t }}<span v-if="i < item.teacher.length - 1">, </span>
+            </span>
+          </p>
+          <div class="meta">
+            <span>📅 {{ item.date }}</span>
+            <span>🕒 {{ item.time }}</span>
+            <NuxtLink :to="`/highlights/${item.id}`" class="read-more">{{ item.cta }} →</NuxtLink>
+          </div>
+        </div>
+      </div>
+
+      <!-- Lista di classi Highlight -->
+      <!-- <div class="highlights-list">
         <div v-for="item in filteredHighlights" :key="item.id" class="highlight-card">
           <div class="image-placeholder">
             <span class="category-label">MEDITATION</span>
@@ -57,6 +81,7 @@
           </div>
         </div>
       </div>
+      -->
 
       <!-- Barra laterale
       <aside class="sidebar">
@@ -87,45 +112,9 @@
 <script setup>
 import { ref, computed } from 'vue'
 
+const client = useSupabaseClient()
 const search = ref('')
 const selectedCategory = ref('All')
-
-const filteredHighlights = computed(() => {
-  return highlights.filter((cls) =>
-    (selectedCategory.value === 'All' || cls.category === selectedCategory.value) &&
-    cls.title.toLowerCase().includes(search.value.toLowerCase())
-  )
-})
-
-const highlights = [
-  {
-    id: 1,
-    title: "Yoga For The Mind",
-    category: "Meditation",
-    description: "Yoga is the practice of quieting the mind. You need to convince.",
-    teacher: "Anna Laurent",
-    date: "May 30, 2025",
-    time: "08:00 AM - 10:30 AM",
-  },
-  {
-    id: 2,
-    title: "Yoga Together",
-    category: "Seminar",
-    description: "Work together is essential for small teams challenge.",
-    teacher: "Warren Hunt",
-    date: "May 19, 2025",
-    time: "09:00 AM - 11:00 AM",
-  },
-  {
-    id: 3,
-    title: "Mindful Moments",
-    category: "Meditation",
-    description: "Learn to pause, breathe, and reconnect with your inner peace.",
-    teacher: "Isabelle Grant",
-    date: "May 13, 2025",
-    time: "10:00 AM - 12:00 PM",
-  },
-];
 
 const categories = [
   "Retreat",
@@ -137,6 +126,28 @@ const categories = [
   "Training",
   "Workshop",
 ];
+
+const {
+  data: highlights,
+  pending,
+  error
+} = await useAsyncData('highlight-classes', async () => {
+  const { data, error } = await client
+    .from('highlight_classes')
+    .select('*')
+    .order('date', { ascending: true })
+  if (error) throw error
+  return data
+})
+
+const filteredHighlights = computed(() => {
+  if (!highlights.value) return []
+  return highlights.value.filter((cls) => {
+    const matchCategory = selectedCategory.value === 'All' || cls.type === selectedCategory.value
+    const matchSearch = cls.title.toLowerCase().includes(search.value.toLowerCase())
+    return matchCategory && matchSearch
+  })
+})
 </script>
 
 <style scoped>
