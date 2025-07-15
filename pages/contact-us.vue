@@ -99,7 +99,7 @@ function submitForm() {
   color: #4b2e83;
 }
 
-/* Hero */
+/* Parte iniziale */
 .contact-hero {
   background: #ecdaf6;
   text-align: center;
@@ -143,7 +143,7 @@ function submitForm() {
   font-weight: bold;
 }
 
-/* Content Grid */
+/* Griglia di contenuto */
 .contact-content {
   display: flex;
   flex-wrap: wrap;
@@ -158,7 +158,7 @@ function submitForm() {
   flex: 1 1 400px;
 }
 
-/* Left Side */
+/* Lato sinistro */
 .placeholder-image {
   background-color: #ccc;
   width: 100%;
@@ -185,7 +185,7 @@ function submitForm() {
   color: #999;
 }
 
-/* Right Side */
+/* Lato destro */
 .contact-right .subtitle {
   color: #9024af;
   font-weight: 500;

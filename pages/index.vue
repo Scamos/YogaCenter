@@ -1,18 +1,5 @@
 <template> 
   <div class="homepage">
-    <!--
-    <div class="min-h-screen bg-slate-900 text-white p-5">
-    <h1 class="text-4xl font-bold text.cyan-400">Instruments</h1>
-    <form @submit.prevent="createInstrument" class="flex gap-2 mt-3">
-      <input type="text" v-model="instrumentEmoji" placeholder="Emoji" class="bg-slate-800 p-2 rounded-md text-white">
-      <input type="text" v-model="instrumentName" placeholder="Instrument name" class="bg-slate-800 p-2 rounded-md text-white">
-      <button type="submit" class="bg-cyan-500 text-white p-2 rounded-md">Add</button>
-    </form>
-    <ul class="list-disc ml-5 text-xl mt-4">
-      <li v-for="instrument in instruments" :key="instrument.id">{{ instrument?.emoji }} {{ instrument.name }}<Icon name="mdi:trashcan" class="cursor-pointer hover:text-red-500" @click="deleteInstrument(instrument.id)"></Icon></li>
-    </ul>
-  </div>
-  -->
     
     <!-- Header -->
     <Header />
@@ -137,27 +124,7 @@
         </div>
         <NuxtLink :to="`/classes/${classItem.id}`" class="btn-outline">{{ classItem.cta }}</NuxtLink>
       </div>
-      <!-- <div class="class-card">
-        <div class="image"></div>
-        <h3>BODY BALANCE</h3>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed.</p>
-        <div class="meta">
-          <p>02:00 PM - 03:30 PM</p>
-          <p>Wednesday - Friday</p>
-        </div>
-        <a href="#" class="btn-pink">JOIN CLASS</a>
-      </div>
-      <div class="class-card">
-        <div class="image"></div>
-        <h3>MEDITATION YOGA</h3>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed.</p>
-        <div class="meta">
-          <p>08:30 AM - 10:00 AM</p>
-          <p>Friday - Sunday</p>
-        </div>
-        <a href="#" class="btn-outline">JOIN CLASS</a>
-      </div>
-      -->
+      
       <div class="class-card">
         <div 
         class="image"
@@ -289,10 +256,7 @@ onMounted(async () => {
   }
 
   const topThree = data.filter(c => c.tag?.toLowerCase() !== 'learn more').slice(0, 3)
-  //const learnMoreCard = data.find(c => c.tag?.toLowerCase() === 'learn more')
 
-  // Combina i primi 3 con la card Learn More, se esiste
-  //classCards.value = learnMoreCard ? [...topThree, learnMoreCard] : topThree
   const { data: teacherList, error: teacherError } = await client
     .from('teachers')
     .select('*')
@@ -336,29 +300,6 @@ onMounted(async () => {
   }
 })
 
-/*
-const instruments = ref([])
-const instrumentName = ref('')
-const instrumentEmoji = ref('')
-const createInstrument = async () => {
-  const { data, error } = await client.from('instruments').insert({
-    name:instrumentName.value,
-    emoji:instrumentEmoji.value
-  }).select().single()
-  instruments.value.push(data)
-  if (error) throw error
-  instrumentName.value = ''
-  instrumentEmoji.value = ''  
-}
-const deleteInstrument = async (id) => {
-  instruments.value = instruments.value.filter(instrument => instrument.id !== id)
-  await client.from('instruments').delete().eq('id', id)
-}
-onMounted(async () => {
-  const { data, error } = await client.from('instruments').select()
-  instruments.value = data
-})
-*/
 </script>
 
 <style scoped>

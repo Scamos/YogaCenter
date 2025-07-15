@@ -173,10 +173,7 @@ import Footer from '@/components/footer.vue'
   margin: 0 0.5rem;
   font-weight: bold;
 }
-/*.bold {
-  font-weight: bold;
-  text-decoration: underline;
-}*/
+
 .about-main {
   display: flex;
   flex-wrap: wrap;
@@ -243,10 +240,6 @@ import Footer from '@/components/footer.vue'
   width: 80%;
   margin: 3rem auto 0;
 }
-
-/*.timeline-line .w-1/3{
-  width: 33%;
-}*/
 
 .timeline-line .circle {
   width: 16px;

@@ -64,45 +64,6 @@
           </div>
         </div>
       </div>
-
-      <!-- Lista di classi Highlight -->
-      <!-- <div class="highlights-list">
-        <div v-for="item in filteredHighlights" :key="item.id" class="highlight-card">
-          <div class="image-placeholder">
-            <span class="category-label">MEDITATION</span>
-          </div>
-          <h2>{{ item.title }}</h2>
-          <p class="description">{{ item.description }}</p>
-          <p class="teacher">👤 Teacher: {{ item.teacher }}</p>
-          <div class="meta">
-            <span>📅 {{ item.date }}</span>
-            <span>🕒 {{ item.time }}</span>
-            <NuxtLink :to="`/highlight`" class="read-more">READ MORE →</NuxtLink>
-          </div>
-        </div>
-      </div>
-      -->
-
-      <!-- Barra laterale
-      <aside class="sidebar">
-        <div class="search-box">
-          <label>SEARCH CLASS</label>
-          <div class="search-input">
-            <input type="text" placeholder="Search Here" />
-            <span class="search-icon">🔍</span>
-          </div>
-        </div>
-
-        <div class="categories">
-          <label>CATEGORIES</label>
-          <ul>
-            <li v-for="cat in categories" :key="cat" :class="{ active: cat === 'Meditation' }">
-              ✴ {{ cat }}
-            </li>
-          </ul>
-        </div>
-      </aside>
-       -->
     </div>
 
     <Footer />
