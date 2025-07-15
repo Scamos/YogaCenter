@@ -5,13 +5,13 @@
     <section class="class-hero">
       <Backbutton />
       <p class="subtitle">IMPROVE YOURSELF</p>
-      <h1 class="title">Stretching Yoga</h1>
+      <h1 class="title">{{ yogaClass?.title }}</h1>
 
-      <div class="instructor-meta">
-        <img class="teacher-thumb" src="/YogaTeacher1.png" alt="Anna Laurent" />
+      <div class="instructor-meta" v-for="teacher in teachers" :key="teacher.id">
+        <img class="teacher-thumb" :src="teacher.image_url" :alt="teacher.name + ' ' + teacher.surname" />
         <div class="details">
-          <p class="teacher-name">Anna Laurent</p>
-          <p class="class-date">May 12–30, 2025</p>
+          <p class="teacher-name">{{ teacher.name }} {{ teacher.surname }}</p>
+          <p class="class-date">{{ yogaClass?.date }}</p>
         </div>
         <div class="social-icons">
           <i class="fab fa-facebook-f"></i>
@@ -30,35 +30,39 @@
       <span class="dash">–</span>
       <NuxtLink to="/highlights" class="breadcrumb-link">HIGHLIGHTS</NuxtLink> 
       <span class="dash">–</span>
-      <a href="#classes-top" class="current">STRETCHING YOGA</a>
+      <a href="#classes-top" class="current">{{ yogaClass?.title?.toUpperCase() }}</a>
     </nav>
     </section>
 
     <!-- Informazioni delle Classi -->
     <section class="class-info">
-      <img class="banner" src="/stretching.png" alt="Stretching" />
+      <img class="banner" :src="yogaClass?.image_url" :alt="yogaClass?.tag" />
       <div class="info-block">
-        <p><strong>Teacher:</strong> Anna Laurent</p>
-        <p><strong>Date:</strong> May 12–30, 2025</p>
-        <p><strong>Time:</strong> 08:30 AM - 10:00 AM (Mon–Wed)</p>
-        <button class="btn-pink">JOIN CLASS</button>
+        <p><strong>Teachers:</strong>
+           <span v-for="(teacher, index) in teachers" :key="teacher.id">
+            {{ teacher.name }} {{ teacher.surname }}<span v-if="index < teachers.length - 1">, </span>
+          </span>
+          </p>
+        <p><strong>Date:</strong> {{ yogaClass?.date }}</p>
+        <p><strong>Time:</strong> {{ yogaClass?.time }}</p>
+        <button class="btn-pink">{{ yogaClass?.cta }}</button>
       </div>
     </section>
 
     <!-- Descrizione & Citazione -->
     <section class="class-description">
-      <h2>Improve Your Flexibility</h2>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi.</p>
+      <h2>{{ yogaClass?.title }}</h2>
+      <p>{{ yogaClass?.description }}</p>
       <blockquote>
         "This yoga session changed my posture and mindset completely!"
       </blockquote>
 
       <h2>Why Join This Class</h2>
-      <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+      <p>{{ yogaClass?.why_yoga }}</p>
 
-      <div class="video">
+      <div class="video" v-if="yogaClass?.video_url">
         <video controls width="100%">
-          <source src="/videos/stretching-intro.mp4" type="video/mp4" />
+          <source :src="yogaClass.video_url" type="video/mp4" />
           Your browser does not support the video tag.
         </video>
       </div>
@@ -97,6 +101,41 @@
 </template>
 
 <script setup>
+const client = useSupabaseClient()
+const route = useRoute()
+
+const yogaClass = ref(null)
+const teachers = ref([])
+
+onMounted(async () => {
+  const { id } = route.params
+
+  // Recupera la classe da highlight_classes
+  const { data, error } = await client
+    .from('highlight_classes')
+    .select('*')
+    .eq('id', id)
+    .single()
+
+  if (error) {
+    console.error('Errore nel recupero della classe highlight:', error)
+  } else {
+    yogaClass.value = data
+    if (data.teacher_id?.length > 0) {
+      const { data: teacherData, error: teacherError } = await client
+        .from('teachers')
+        .select('id, name, surname, image_url, uuid')
+        .in('uuid', data.teacher_id)
+
+      if (!teacherError) {
+        teachers.value = teacherData
+      } else {
+        console.warn('Errore nel recupero insegnanti:', teacherError)
+      }
+    }
+  }
+})
+
 const comments = [
   { name: 'Laura Dover', text: 'Great class, loved the instructor!', date: '2025-05-10 08:45', level: 0 },
   { name: 'Anna Laurent', text: 'Thanks Laura! ❤️', date: '2025-05-10 09:00', level: 1 },
