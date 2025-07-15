@@ -39,25 +39,26 @@
       </h2>
     </div>
     <!-- Griglia delle classi disponibili -->
-    <div class="class-grid">
+    <div v-if="pendingClasses">Loading classes...</div>
+    <div v-else-if="errorClasses">Error loading classes.</div>
+    <div v-else class="class-grid">
       <div
         class="class-card"
         v-for="yogaClass in filteredNormalClasses"
         :key="yogaClass.id"
       >
-        <img :src="yogaClass.image" :alt="yogaClass.title" class="class-img" />
+        <img :src="yogaClass.image_url" :alt="yogaClass.title" class="class-img" />
         <h3>{{ yogaClass.title }}</h3>
         <p>{{ yogaClass.description }}</p>
         <div class="meta">
           <p>{{ yogaClass.time }}</p>
-          <p>{{ yogaClass.days }}</p>
+          <p>{{ yogaClass.date }}</p>
         </div>
         <NuxtLink
           class="btn-pink"
-          :to="`/class?id=${yogaClass.id}`"
-          v-if="yogaClass.id !== 6"
+          :to="`/classes/${yogaClass.id}`"
         >
-        JOIN CLASS
+        {{ yogaClass.cta }}
         </NuxtLink>
       </div>
     </div>
@@ -69,40 +70,38 @@
       </h2>
     </div>
     <!-- Griglia delle classi highlight -->
-    <div class="class-grid">
+    <div v-if="pendingHighlights">Loading highlight classes...</div>
+    <div v-else-if="errorHighlights">Error loading highlight classes.</div>
+    <div v-else class="class-grid">
       <div
         class="class-card"
         v-for="yogaClass in filteredHighlightClasses"
         :key="yogaClass.id"
       >
-        <img :src="yogaClass.image" :alt="yogaClass.title" class="class-img" />
+        <img :src="yogaClass.image_url" :alt="yogaClass.title" class="class-img" />
         <h3>{{ yogaClass.title }}</h3>
         <p>{{ yogaClass.description }}</p>
         <div class="meta">
           <p>{{ yogaClass.time }}</p>
-          <p>{{ yogaClass.days }}</p>
+          <p>{{ yogaClass.date }}</p>
         </div>
         <NuxtLink
           class="btn-pink"
-          :to="`/class?id=${yogaClass.id}`"
-          v-if="yogaClass.id !== 6"
+          :to="`/classes/${yogaClass.id}`"
         >
-        JOIN CLASS
+        {{ yogaClass.cta }}
         </NuxtLink>
       </div>
     </div>
 
     <div class="class-grid">
-  <div
-    v-if="alwaysVisibleClass"
-    class="class-card"
-  >
-    <img :src="alwaysVisibleClass.image" :alt="alwaysVisibleClass.title" class="class-img" />
-    <h3>{{ alwaysVisibleClass.title }}</h3>
-    <p>{{ alwaysVisibleClass.description }}</p>
+    <div class="class-card">
+    <img src="/discoverhighlights.png" alt="Discover Highlights" class="class-img" />
+    <h3>WANT TO SEE MORE?</h3>
+    <p>Discover all our highlight classes by clicking on this.</p>
     <div class="meta">
-      <p>{{ alwaysVisibleClass.time }}</p>
-      <p>{{ alwaysVisibleClass.days }}</p>
+      <p>Anytime!</p>
+      <p>Everyday!</p>
     </div>
     <NuxtLink to="/highlights" class="btn-pink">SEE HIGHLIGHTS</NuxtLink>
   </div>
@@ -116,86 +115,71 @@
 // Qui posso inserire fetch dinamici da Supabase in futuro
 import { ref, computed } from 'vue'
 
+const client = useSupabaseClient()
 const search = ref('')
 const selectedCategory = ref('All')
 
-const categories = ['All', 'Stretching', 'Balance', 'Meditation', 'Seminar' ]
+// Filtri basati su campo "type"
+const categories = [
+  'All', 
+  'Retreat', 
+  'Meditation', 
+  'Yoga', 
+  'Fitness',
+  'Nature',
+  'Seminar',
+  'Training',
+  'Workshop' ]
 
-const allClasses = ref([
-  {
-    id: 1,
-    title: 'STRETCHING YOGA',
-    category: 'Stretching',
-    description: 'Improve flexibility with guided stretching techniques.',
-    time: '08:30 AM - 10:00 AM',
-    days: 'Monday - Wednesday',
-    image: '/stretching.png',
-  },
-  {
-    id: 2,
-    title: 'BODY BALANCE',
-    category: 'Balance',
-    description: 'Balance your body and mind in dynamic flow sessions.',
-    time: '02:00 PM - 03:30 PM',
-    days: 'Wednesday - Friday',
-    image: '/balance.png',
-  },
-  {
-    id: 3,
-    title: 'MEDITATION YOGA',
-    category: 'Meditation',
-    description: 'Mindfulness and calmness through breathing and silence.',
-    time: '08:30 AM - 10:00 AM',
-    days: 'Friday - Sunday',
-    image: '/meditation.png',
-  },
-  {
-    id: 4,
-    title: 'YOGA FOR THE MIND',
-    category: 'Meditation',
-    description: 'Yoga is the practice of quieting the mind you need to convince.',
-    time: '08:30 AM - 10:00 AM',
-    days: 'May 30, 2025',
-    image: '/mindyoga.png',
-  },
-  {
-    id: 5,
-    title: 'YOGA TOGETHER',
-    category: 'Seminar',
-    description: 'Work together is essential for small teams challenge.',
-    time: '01:30 PM - 03:30 PM',
-    days: 'May 19, 2025',
-    image: '/togetheryoga.png',
-  },
-  {
-    id: 6,
-    title: 'WANT TO SEE MORE?',
-    category: 'All',
-    description: 'Discover all our highlight classes by clicking on this.',
-    time: 'Anytime!',
-    days: 'Everyday!',
-    image: '/discoverhighlights.png',
-  }
-])
+  // Fetch classi da Supabase
+const { data: allClasses, pending: pendingClasses, error: errorClasses } = await useAsyncData('all-classes', async () => {
+  const { data, error } = await client
+    .from('classes')
+    .select('*') // seleziona i campi necessari (* li seleziona tutti)
+    .order('date', { ascending: true })
 
+  if (error) throw error
+  return data
+})
+
+// Fetch classi highlight
+const {
+  data: highlightClasses,
+  pending: pendingHighlights,
+  error: errorHighlights
+} = await useAsyncData('highlight-classes', async () => {
+  const { data, error } = await client
+    .from('highlight_classes')
+    .select('*')
+    .order('date', { ascending: true })
+
+  if (error) throw error
+  return data
+})
+
+// Computed classi filtrate
 const filteredNormalClasses = computed(() => {
-  return allClasses.value.filter((cls) =>
-    [1, 2, 3].includes(cls.id) &&
-    (selectedCategory.value === 'All' || cls.category === selectedCategory.value) &&
-    cls.title.toLowerCase().includes(search.value.toLowerCase())
-  )
+  if (!allClasses.value) return []
+  return allClasses.value.filter((cls) => {
+    const matchCategory =
+      selectedCategory.value === 'All' || cls.type === selectedCategory.value
+    const matchSearch = cls.title
+      .toLowerCase()
+      .includes(search.value.toLowerCase())
+    return matchCategory && matchSearch
+  })
 })
 
 const filteredHighlightClasses = computed(() => {
-  return allClasses.value.filter((cls) =>
-    [4, 5].includes(cls.id) &&
-    (selectedCategory.value === 'All' || cls.category === selectedCategory.value) &&
-    cls.title.toLowerCase().includes(search.value.toLowerCase())
-  )
-})
-
-const alwaysVisibleClass = computed(() => {
-  return allClasses.value.find((cls) => cls.id === 6)
+  if (!highlightClasses.value) return []
+  return highlightClasses.value.filter((cls) => {
+    const matchCategory =
+      selectedCategory.value === 'All' || cls.type === selectedCategory.value
+    const matchSearch = cls.title
+      .toLowerCase()
+      .includes(search.value.toLowerCase())
+    return matchCategory && matchSearch
+  })
 })
 </script>
 
