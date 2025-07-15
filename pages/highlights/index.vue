@@ -53,8 +53,8 @@
           <p class="description">{{ item.description }}</p>
           <p class="teacher">
             👤 Teachers:
-            <span v-for="(t, i) in item.teacher" :key="i">
-              {{ t }}<span v-if="i < item.teacher.length - 1">, </span>
+            <span v-for="(t, i) in item.teacher_names" :key="i">
+              {{ t.name }} {{ t.surname }}<span v-if="i < item.teacher_names.length - 1">, </span>
             </span>
           </p>
           <div class="meta">
@@ -137,7 +137,22 @@ const {
     .select('*')
     .order('date', { ascending: true })
   if (error) throw error
-  return data
+
+  // Prende tutti gli insegnanti di quella classe highlight
+  const { data: teachersData, error: teachersError } = await client
+    .from('teachers')
+    .select('*')
+
+  if (teachersError) throw teachersError
+
+  // Associa gli insegnanti alle classi highlight
+  return data.map(cls => {
+    const teacher_names = teachersData.filter(t => cls.teacher_id?.includes(t.uuid))
+    return {
+      ...cls,
+      teacher_names
+    }
+  })
 })
 
 const filteredHighlights = computed(() => {
