@@ -87,7 +87,7 @@
         </div>
         <NuxtLink
           class="btn-pink"
-          :to="`/classes/${yogaClass.id}`"
+          :to="`/highlights/${yogaClass.id}`"
         >
         {{ yogaClass.cta }}
         </NuxtLink>
