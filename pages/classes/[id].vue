@@ -7,7 +7,7 @@
       <p class="subtitle">IMPROVE YOURSELF</p>
       <h1 class="title">{{ yogaClass?.title }}</h1>
 
-      <div class="instructor-meta" v-if="teacher">
+      <div class="instructor-meta" v-for="teacher in teachers" :key="teacher.id">
         <img class="teacher-thumb" :src="teacher.image_url" :alt="teacher.name + ' ' + teacher.surname" />
         <div class="details">
           <p class="teacher-name">{{ teacher.name }} {{ teacher.surname }}</p>
@@ -36,7 +36,11 @@
     <section class="class-info">
       <img class="banner" :src="yogaClass?.image_url" :alt="yogaClass?.tag" />
       <div class="info-block">
-        <p><strong>Teacher:</strong> {{ teacher?.name }} {{ teacher?.surname }}</p>
+        <p><strong>Teachers:</strong> 
+          <span v-for="(teacher, index) in teachers" :key="teacher.id">
+            {{ teacher.name }} {{ teacher.surname }}<span v-if="index < teachers.length - 1">, </span>
+          </span>
+        </p>
         <p><strong>Date:</strong> {{ yogaClass?.date }}</p>
         <p><strong>Time:</strong> {{ yogaClass?.time }}</p>
         <button class="btn-pink">{{ yogaClass?.cta }}</button>
@@ -99,7 +103,7 @@ const client = useSupabaseClient()
 const route = useRoute()
 
 const yogaClass = ref(null)
-const teacher = ref(null)
+const teachers = ref([])
 
 onMounted(async () => {
   const { id } = route.params
@@ -123,7 +127,7 @@ onMounted(async () => {
         .in('uuid', data.teacher_id)
 
       if (!teacherError) {
-        teacher.value = teacherData?.[0] ?? null
+        teachers.value = teacherData
       } else {
         console.warn('Errore nel recupero insegnante:', teacherError)
       }
